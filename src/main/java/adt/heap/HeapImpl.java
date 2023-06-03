@@ -62,7 +62,39 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 	private int right(int i) {
 		return (i * 2 + 1) + 1;
 	}
-
+	
+	private boolean isValidIndex(int number) {
+		return number >= 0 && number < this.index;
+	}
+	
+	private boolean isLeaf(int number) {
+		return number > this.parent(number) && number <= this.index;
+	}
+	
+	private int compareIndex(int parent, int left, int right) {
+		int result;
+        if (this.comparator.compare(this.heap[parent], this.heap[left]) == 1) {
+            if (
+            		this.isValidIndex(right) && 
+            		this.comparator.compare(this.heap[parent], this.heap[right]) == -1
+            	) {
+            	result = right;
+            } else {
+            	result = parent;
+            }
+        } else {
+                if (
+                		this.isValidIndex(right) &&
+                		this.comparator.compare(this.heap[left], this.heap[right]) == -1
+                	) {
+                    result = right;
+                } else {
+                	result = left;
+                }
+        }
+        return result;
+    }
+	
 	@Override
 	public boolean isEmpty() {
 		return (index == -1);
@@ -84,8 +116,14 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 	 * para subir os elementos na heap.
 	 */
 	private void heapify(int position) {
-		// TODO Implement htis method.
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (!isLeaf(position) && this.isValidIndex(position)) {
+				int toSwitch = this.compareIndex(position, this.left(position), this.right(position));
+				
+				if (toSwitch != position) {
+	                Util.swap(this.heap, position, toSwitch);
+	                heapify(toSwitch);
+			}
+		}
 	}
 
 	@Override
