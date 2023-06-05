@@ -68,7 +68,7 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 	}
 	
 	private boolean isLeaf(int number) {
-		return number > this.parent(number) && number <= this.index;
+		return number > this.parent(this.index) && number <= this.index;
 	}
 	
 	private int compareIndex(int parent, int left, int right) {
@@ -139,7 +139,7 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 		this.heap[index] = element;
 		
 		int i = index;
-		while (i > 0 && this.heap[this.parent(i)].compareTo(this.heap[i]) == -1) {
+		while (i > 0 && this.comparator.compare(this.heap[this.parent(i)], this.heap[i]) == -1) {
 			T aux = this.heap[i];
 	        this.heap[i] = this.heap[this.parent(i)];
 	        this.heap[this.parent(i)] = aux;
@@ -162,6 +162,7 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 		if (!this.isEmpty()) {
 			root = this.heap[0];
 			this.heap[0] = this.heap[index];
+			this.heap[index] = root;
 			this.index -= 1;
 			
 			this.heapify(0);
@@ -180,8 +181,21 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 
 	@Override
 	public T[] heapsort(T[] array) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		this.heap = array;
+		this.buildHeap(array);
+		while (this.size() > 0) {
+			Util.swap(this.heap, 0, this.index);
+			this.index--;
+			this.heapify(0);
+		}
+		if (this.comparator instanceof ComparatorMinHeap) {
+			int j = this.heap.length - 1;
+			for (int i = 0; i < this.heap.length / 2; i++) {
+				Util.swap(this.heap, i, j);
+				j--;
+			}
+		}
+		return this.heap;
 	}
 
 	@Override
