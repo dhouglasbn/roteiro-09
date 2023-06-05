@@ -133,26 +133,49 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 			heap = Arrays.copyOf(heap, heap.length + INCREASING_FACTOR);
 		}
 		// /////////////////////////////////////////////////////////////////
-		// TODO Implemente a insercao na heap aqui.
-		throw new UnsupportedOperationException("Not implemented yet!");
+		
+		
+		this.index += 1;
+		this.heap[index] = element;
+		
+		int i = index;
+		while (i > 0 && this.heap[this.parent(i)].compareTo(this.heap[i]) == -1) {
+			T aux = this.heap[i];
+	        this.heap[i] = this.heap[this.parent(i)];
+	        this.heap[this.parent(i)] = aux;
+	        i = this.parent(i);
+		}
 	}
 
 	@Override
 	public void buildHeap(T[] array) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		this.heap = array;
+		this.index = array.length - 1;
+		for (int i = this.parent(this.index); i >= 0; i--)
+            heapify(i);
+			
 	}
 
 	@Override
 	public T extractRootElement() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		T root = null;
+		if (!this.isEmpty()) {
+			root = this.heap[0];
+			this.heap[0] = this.heap[index];
+			this.index -= 1;
+			
+			this.heapify(0);
+		}
+        return root;
 	}
 
 	@Override
 	public T rootElement() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		T root = null;
+		if (!this.isEmpty()) {
+			root = this.heap[0];
+		}
+		return root;
 	}
 
 	@Override
@@ -163,8 +186,7 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return this.index + 1;
 	}
 
 	public Comparator<T> getComparator() {
