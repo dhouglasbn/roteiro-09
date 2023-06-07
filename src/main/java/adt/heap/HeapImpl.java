@@ -128,22 +128,25 @@ public class HeapImpl<T extends Comparable<T>> implements Heap<T> {
 
 	@Override
 	public void insert(T element) {
-		// ESSE CODIGO E PARA A HEAP CRESCER SE FOR PRECISO. NAO MODIFIQUE
-		if (index == heap.length - 1) {
-			heap = Arrays.copyOf(heap, heap.length + INCREASING_FACTOR);
-		}
-		// /////////////////////////////////////////////////////////////////
-		
-		
-		this.index += 1;
-		this.heap[index] = element;
-		
-		int i = index;
-		while (i > 0 && this.comparator.compare(this.heap[this.parent(i)], this.heap[i]) == -1) {
-			T aux = this.heap[i];
-	        this.heap[i] = this.heap[this.parent(i)];
-	        this.heap[this.parent(i)] = aux;
-	        i = this.parent(i);
+		if (element != null) {
+			
+			// ESSE CODIGO E PARA A HEAP CRESCER SE FOR PRECISO. NAO MODIFIQUE
+			if (index == heap.length - 1) {
+				heap = Arrays.copyOf(heap, heap.length + INCREASING_FACTOR);
+			}
+			// /////////////////////////////////////////////////////////////////
+			
+			
+			this.index += 1;
+			this.heap[index] = element;
+			
+			int i = index;
+			while (i > 0 && this.comparator.compare(this.heap[this.parent(i)], this.heap[i]) == -1) {
+				T aux = this.heap[i];
+				this.heap[i] = this.heap[this.parent(i)];
+				this.heap[this.parent(i)] = aux;
+				i = this.parent(i);
+			}
 		}
 	}
 

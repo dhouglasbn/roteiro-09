@@ -51,6 +51,7 @@ public class StudentMinHeapTest {
 		heap.insert(-5);
 		heap.insert(14);
 		heap.insert(3);
+		heap.insert(null);
 		heap.insert(-10);
 		heap.insert(0);
 
@@ -58,6 +59,37 @@ public class StudentMinHeapTest {
 		assertFalse(heap.isEmpty());
 
 		verifyHeap(new Integer[] { -10, -5, -2, 3, 0, 8, 14, 12, 7, 8 });
+	}
+	
+	@Test
+	public void testInsertWithResize() {
+		heap.insert(8);
+		heap.insert(12);
+		heap.insert(-2);
+		heap.insert(7);
+		heap.insert(8);
+		heap.insert(-5);
+		heap.insert(14);
+		heap.insert(3);
+		heap.insert(-10);
+		heap.insert(0);
+		heap.insert(20);
+		heap.insert(14);
+		heap.insert(16);
+		heap.insert(-4);
+		heap.insert(17);
+		heap.insert(21);
+		heap.insert(23);
+		heap.insert(-15);
+		heap.insert(-18);
+		heap.insert(-9);
+		heap.insert(30);
+		
+		assertEquals(21, heap.size());
+		assertFalse(heap.isEmpty());
+
+		verifyHeap(new Integer[] { -18, -15, -4, -10, -9, 8, -2, 12, -5,
+				0, 20, 14, 16, 14, 17, 21, 23, 7, 3, 8, 30 });
 	}
 
 	@Test
@@ -73,16 +105,51 @@ public class StudentMinHeapTest {
 		heap.insert(53);
 		heap.insert(30);
 
+		assertEquals(new Integer(15), heap.rootElement());
 		assertEquals(new Integer(15), heap.extractRootElement());
+		
+		assertEquals(new Integer(17), heap.rootElement());
 		assertEquals(new Integer(17), heap.extractRootElement());
+		
+		assertEquals(new Integer(22), heap.rootElement());
 		assertEquals(new Integer(22), heap.extractRootElement());
+		
+		assertEquals(new Integer(26), heap.rootElement());
 		assertEquals(new Integer(26), heap.extractRootElement());
+		
+		assertEquals(new Integer(30), heap.rootElement());
 		assertEquals(new Integer(30), heap.extractRootElement());
 
+		
 		assertEquals(5, heap.size());
 		assertFalse(heap.isEmpty());
 
 		verifyHeap(new Integer[] { 38, 40, 79, 45, 53 });
+	}
+	
+	@Test
+	public void testRemoveEmptyHeap() {
+		assertNull(heap.extractRootElement());
+
+		assertEquals(0, heap.size());
+		assertTrue(heap.isEmpty());
+
+		verifyHeap(new Integer[0]);
+	}
+	
+	@Test
+	public void testRootElement() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		for (Integer number: array) {
+			this.heap.insert(number);
+		}
+		
+		assertEquals(new Integer(15), this.heap.rootElement());
+	}
+	
+	@Test
+	public void testRootElementinEmptyHeap() {
+		assertNull(this.heap.rootElement());
 	}
 
 	@Test
@@ -94,6 +161,55 @@ public class StudentMinHeapTest {
 		assertTrue(heap.isEmpty());
 
 		assertArrayEquals(new Integer[] {}, heap.toArray());
+	}
+	
+	@Test
+	public void testSortEmptyHeap() {
+		assertArrayEquals(new Integer[0],
+				heap.heapsort(new Integer[0]));
+
+		assertEquals(0, heap.size());
+		assertTrue(heap.isEmpty());
+
+		assertArrayEquals(new Integer[] {}, heap.toArray());
+	}
+	
+	@Test
+	public void testSortOneElementHeap() {
+		assertArrayEquals(new Integer[] { 5 },
+				heap.heapsort(new Integer[] { 5 }));
+
+		assertEquals(0, heap.size());
+		assertTrue(heap.isEmpty());
+
+		assertArrayEquals(new Integer[] {}, heap.toArray());
+	}
+	
+	@Test
+	public void testBuildHeap() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		this.heap.insert(30);
+		this.heap.insert(40);
+		
+		this.heap.buildHeap(array);
+		
+		assertArrayEquals(new Integer[] { 15, 17, 22, 45, 30, 38, 26, 79, 53, 40 }, this.heap.toArray());
+		
+	}
+	
+	
+	@Test
+	public void testBuildEmptyHeap() {
+		Integer[] array = new Integer[0];
+		
+		this.heap.insert(30);
+		this.heap.insert(40);
+		
+		this.heap.buildHeap(array);
+		
+		assertArrayEquals(new Integer[0], this.heap.toArray());
+		
 	}
 	
 	@Test
@@ -109,6 +225,14 @@ public class StudentMinHeapTest {
 		
 		assertEquals(new Integer(15), this.floorCeil.floor(array, 15));
 	}
+	
+	@Test
+	public void testFloor465() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(45), this.floorCeil.floor(array, 46.5));
+	}
+	
 	
 	@Test
 	public void testFloor14() {
@@ -132,7 +256,21 @@ public class StudentMinHeapTest {
 	}
 	
 	@Test
-	public void testOrderStatistics0() {
+	public void testCeil80() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.floorCeil.ceil(array, 80));
+	}
+	
+	@Test
+	public void testCeil465() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(53), this.floorCeil.ceil(array, 46.5));
+	}
+	
+	@Test
+	public void testOrderStatistics1() {
 		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
 		
 		assertEquals(new Integer(15), this.orderStatistics.getOrderStatistics(array, 1));
@@ -146,10 +284,24 @@ public class StudentMinHeapTest {
 	}
 	
 	@Test
-	public void testCeil80() {
+	public void testOrderStatistics10() {
 		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
 		
-		assertNull(this.floorCeil.ceil(array, 80));
+		assertEquals(new Integer(79), this.orderStatistics.getOrderStatistics(array, 10));
+	}
+	
+	@Test
+	public void testOrderStatistics11() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.orderStatistics.getOrderStatistics(array, 11));
+	}
+	
+	@Test
+	public void testOrderStatistics0() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.orderStatistics.getOrderStatistics(array, 0));
 	}
 
 	private void verifyHeap(Integer[] expected) {
