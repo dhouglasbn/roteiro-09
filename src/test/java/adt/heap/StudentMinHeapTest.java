@@ -3,6 +3,7 @@ package adt.heap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -11,17 +12,23 @@ import java.util.Comparator;
 import org.junit.Before;
 import org.junit.Test;
 
+import adt.heap.extended.FloorCeilHeap;
+import adt.heap.extended.FloorCeilHeapImpl;
+import orderStatistic.OrderStatistics;
+import orderStatistic.OrderStatisticsHeapImpl;
+
 public class StudentMinHeapTest {
 
 	Heap<Integer> heap;
+	FloorCeilHeap floorCeil;
+	OrderStatistics<Integer> orderStatistics;
 
 	@Before
 	public void setUp() {
-		// TODO Instancie seu comparator para fazer sua estrutura funcionar como
-		// uma min heap aqui. Use instanciacao anonima da interface
-		// Comparator!!!!
 		Comparator<Integer> comparator = new ComparatorMinHeap<Integer>();
 		heap = new HeapImpl<Integer>(comparator);
+		this.floorCeil = new FloorCeilHeapImpl(comparator);
+		this.orderStatistics = new OrderStatisticsHeapImpl<Integer>();
 	}
 
 	@Test
@@ -87,6 +94,62 @@ public class StudentMinHeapTest {
 		assertTrue(heap.isEmpty());
 
 		assertArrayEquals(new Integer[] {}, heap.toArray());
+	}
+	
+	@Test
+	public void testFloor80() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(79), this.floorCeil.floor(array, 80));
+	}
+	
+	@Test
+	public void testFloor15() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(15), this.floorCeil.floor(array, 15));
+	}
+	
+	@Test
+	public void testFloor14() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.floorCeil.floor(array, 14));
+	}
+	
+	@Test
+	public void testCeil50() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(53), this.floorCeil.ceil(array, 50));
+	}
+	
+	@Test
+	public void testCeil79() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(79), this.floorCeil.ceil(array, 79));
+	}
+	
+	@Test
+	public void testOrderStatistics0() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(15), this.orderStatistics.getOrderStatistics(array, 1));
+	}
+	
+	@Test
+	public void testOrderStatistics5() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(30), this.orderStatistics.getOrderStatistics(array, 5));
+	}
+	
+	@Test
+	public void testCeil80() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.floorCeil.ceil(array, 80));
 	}
 
 	private void verifyHeap(Integer[] expected) {

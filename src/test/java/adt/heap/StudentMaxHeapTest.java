@@ -3,6 +3,7 @@ package adt.heap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -95,17 +96,45 @@ public class StudentMaxHeapTest {
 	}
 	
 	@Test
-	public void testFloor() {
+	public void testFloor80() {
 		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
 		
 		assertEquals(new Integer(79), this.floorCeil.floor(array, 80));
 	}
 	
 	@Test
-	public void testCeil() {
+	public void testFloor15() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(15), this.floorCeil.floor(array, 15));
+	}
+	
+	@Test
+	public void testFloor14() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.floorCeil.floor(array, 14));
+	}
+	
+	@Test
+	public void testCeil50() {
 		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
 		
 		assertEquals(new Integer(53), this.floorCeil.ceil(array, 50));
+	}
+	
+	@Test
+	public void testCeil79() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(79), this.floorCeil.ceil(array, 79));
+	}
+	
+	@Test
+	public void testCeil80() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertNull(this.floorCeil.ceil(array, 80));
 	}
 
 	private void verifyHeap(Integer[] expected) {
