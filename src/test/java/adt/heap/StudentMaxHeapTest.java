@@ -11,9 +11,12 @@ import java.util.Comparator;
 import org.junit.Before;
 import org.junit.Test;
 
+import adt.heap.extended.FloorCeilHeapImpl;
+
 public class StudentMaxHeapTest {
 
 	Heap<Integer> heap;
+	FloorCeilHeapImpl floorCeil;
 
 	@Before
 	public void setUp() {
@@ -22,6 +25,7 @@ public class StudentMaxHeapTest {
 		// Comparator!!!!
 		Comparator<Integer> comparator = new ComparatorMaxHeap<Integer>();
 		heap = new HeapImpl<Integer>(comparator);
+		floorCeil = new FloorCeilHeapImpl(comparator);
 	}
 
 	@Test
@@ -89,6 +93,20 @@ public class StudentMaxHeapTest {
 
 		assertArrayEquals(new Integer[] {}, heap.toArray());
 	}
+	
+	@Test
+	public void testFloor() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(79), this.floorCeil.floor(array, 80));
+	}
+	
+	@Test
+	public void testCeil() {
+		Integer[] array = {22,45,38,17,40,15,26,79,53,30};
+		
+		assertEquals(new Integer(53), this.floorCeil.ceil(array, 50));
+	}
 
 	private void verifyHeap(Integer[] expected) {
 		boolean isHeap = true;
@@ -112,5 +130,4 @@ public class StudentMaxHeapTest {
 
 		assertTrue(isHeap);
 	}
-
 }
